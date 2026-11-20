@@ -28,7 +28,10 @@ export function isAdminPathname(pathname: string): boolean {
   return pathname === ADMIN_PATH.slice(0, -1) || pathname.startsWith(ADMIN_PATH);
 }
 
-export const ADMIN_CONSOLE_NAME = `${COMPANY_SHORT} Operations Console`;
+// Smartsupp live chat (src/services/liveChat.ts). Public pages only, never the admin console.
+export const SMARTSUPP_KEY = '4b895ac43ffac23845e9b33f4e6c3d78b772296d';
+
+export const ADMIN_CONSOLE_NAME =`${COMPANY_SHORT} Operations Console`;
 
 // Role label shown in the admin UI (CONTENT §10), also written as the operator on new records.
 export const ADMIN_ROLE_LABEL = 'Administrator';
