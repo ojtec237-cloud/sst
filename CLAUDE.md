@@ -9,7 +9,7 @@
 live shipment tracking, Express/SQLite API, admin operations console, PDF documents, quotes and bookings. It was
 last branded "World Vexa Logistics" (prefix `WVL`), and before that
 "SDL Global Logistics". The World Vexa site stays live on its own domain and repo; this folder is the
-SecureShipTrack copy (secureshiptrack.com). Never push this code to the old repo.
+SecureShipTrack copy (secureshiptrack.org). Never push this code to the old repo.
 
 **You are a senior full-stack developer re-launching it as a new company, SecureShipTrack, on a new domain.**
 Work in place on the existing code (no rewrites), in small reviewable commits (`rebrand: …`, `assets: …`, `fix: …`),
@@ -39,10 +39,10 @@ Decisions already made (don't revisit):
 | Short name | SST (e.g. "SST Operations Console", "SST Operations Centre") |
 | Registered legal name | SecureShipTrack (no "Ltd"; used in the footer, legal pages and PDFs) |
 | Tagline | Fast, Safe, Reliable |
-| Primary email | info@secureshiptrack.com |
-| Domain | secureshiptrack.com (public site: https://secureshiptrack.com + `www`) |
+| Primary email | info@secureshiptrack.org |
+| Domain | secureshiptrack.org (public site: https://secureshiptrack.org + `www`) |
 | Coverage | Worldwide |
-| Admin console URL | https://secureshiptrack.com/private-user/ only (`ADMIN_PATH`, same Node app and origin), plus `#/admin` on localhost. The `private.` subdomain is dropped (docs/update.md D-11) |
+| Admin console URL | https://secureshiptrack.org/private-user/ only (`ADMIN_PATH`, same Node app and origin), plus `#/admin` on localhost. The `private.` subdomain is dropped (docs/update.md D-11) |
 | Tracking ID prefix | `SST`: full ID is **exactly 8 characters**, `SST` + 5 characters (e.g. `SST7K2M9`) |
 | Reference prefix | `SST`: `SST-SL-######` (seal), `SST-TKT-######` (ticket), `SST-INV-######` (invoice) |
 | Logo source | `images/SecureShipTrack Globe Courier Logo.png` (2172×724, red/black, real transparency). `node scripts/optimize-images.mjs --brand` rebuilds every logo, icon and the OG image from it |

@@ -9,8 +9,8 @@ export const COMPANY_SHORT = 'SST';
 export const LEGAL_NAME = 'SecureShipTrack';
 export const TAGLINE = 'Fast, Safe, Reliable';
 
-export const EMAIL = 'info@secureshiptrack.com';
-export const DOMAIN = 'secureshiptrack.com';
+export const EMAIL = 'info@secureshiptrack.org';
+export const DOMAIN = 'secureshiptrack.org';
 export const SITE_URL = `https://${DOMAIN}`;
 
 // Logo files in Public/brand (BRAND_GUIDE §6). Full colour on light surfaces, white on Ink.

@@ -7,7 +7,7 @@
 
 **Working method:** treat this like a client engagement on a live system. Before each task, read the affected files; after each task, run `npm run build`, test the flow you touched, commit with a clear message, and log it below.
 
-**Owner:** SecureShipTrack · **Repo:** (new SecureShipTrack repo, TBD) · **Target:** secureshiptrack.com on Hostinger
+**Owner:** SecureShipTrack · **Repo:** (new SecureShipTrack repo, TBD) · **Target:** secureshiptrack.org on Hostinger
 **Status legend:** `[ ]` to do · `[~]` in progress · `[x]` done · `[!]` blocked (see Needs owner)
 
 ---
@@ -131,7 +131,7 @@ The first baseline ran on older code (`0ae1ff4`). `main` then gained 11 upstream
 - [x] 6.1 Old-brand sweep = zero (REBRAND_MAP §6). *Run 2026-09-29 on source and a fresh build: zero unexplained hits (REBRAND_MAP §7). The last 5 `interstate` hits and the U.S. country defaults in admin create/edit/convert were fixed.*
 - [x] 6.2 Functional test: create shipment in admin → track it publicly → documents download → quote flow → contact form. *Scripted Chrome run on a scratch DB, 20/20: admin login, Book Consignment, public track, 3 status changes shown publicly, BOL, quote → publish → Accept & Book (public UI) → Create Shipment from Quote, Ship booking, Contact, Callback, Messages inbox. Fixed on the way: convert crashed the admin console (Blocked #42). The PDF files themselves still need a visual check by eye.*
 - [!] 6.3 Cross-browser: Chrome, Safari (iOS), Firefox, Samsung Internet; low-end Android test. *Needs the owner's devices (Blocked #43). Desktop Chrome checked at 375 and 1440.*
-- [x] 6.4 SEO: per-page titles/descriptions, `robots.txt`, `sitemap.xml`, OG image, structured data (Organization). *`server/seo.ts`: host-aware `robots.txt` and `sitemap.xml`; the admin host gets `Disallow: /`, a 404 sitemap and an `X-Robots-Tag: noindex` header on every response. Organization JSON-LD in `index.html` (confirmed facts only). Titles/descriptions were already per page (`PAGE_META`). Hash routing limits indexing to `/` (Blocked #44).* **Blocker for go-live:** the OG image URL is absolute (`https://secureshiptrack.com/brand/og-image.jpg`) and only works once the domain serves the site; verify it with DEPLOYMENT.md §5 before announcing the launch.
+- [x] 6.4 SEO: per-page titles/descriptions, `robots.txt`, `sitemap.xml`, OG image, structured data (Organization). *`server/seo.ts`: host-aware `robots.txt` and `sitemap.xml`; the admin host gets `Disallow: /`, a 404 sitemap and an `X-Robots-Tag: noindex` header on every response. Organization JSON-LD in `index.html` (confirmed facts only). Titles/descriptions were already per page (`PAGE_META`). Hash routing limits indexing to `/` (Blocked #44).* **Blocker for go-live:** the OG image URL is absolute (`https://secureshiptrack.org/brand/og-image.jpg`) and only works once the domain serves the site; verify it with DEPLOYMENT.md §5 before announcing the launch.
 - [x] 6.5 Accessibility: keyboard nav, focus states, alt text, contrast, reduced motion. *axe-core (WCAG 2.1 AA) on 11 public pages at 375 and 1440: 0 violations after fixes. Added skip link, global `:focus-visible` ring, keyboard-reachable logo and breadcrumb, Escape on public overlays, Ship labels, contrast fixes, Legal mobile overflow, global reduced-motion guard. Not audited: the admin console and later form steps (Blocked #45).*
 - [ ] 6.6 Take "after" screenshots → `screens/after/`.
 - [x] 6.7 **Remove ALL demo data before launch (launch blocker).** Done 2026-09-30: client mock fallback, admin seed, fake timeline and checkpoint dates, the home-map demo dot, `mockShipments.ts`, `demoData.ts` and `server/seed.ts` removed; `SEED_DEMO_DATA` no longer does anything. The production database was never seeded. The admin wizard's example presets (#47c) are not demo shipments and were left for an owner decision. Every spot is marked `DEMO DATA — remove before launch (tracker 6.7).` in the code; `grep -rn "DEMO DATA" src server` lists them. Remove:
@@ -145,14 +145,14 @@ The first baseline ran on older code (`0ae1ff4`). `main` then gained 11 upstream
 - [ ] 7.1 Hostinger Node.js app connected to the SecureShipTrack GitHub repo (a new repo, not the old site's); Node ≥ 22.5.
 - [ ] 7.2 Env vars set (fresh `ADMIN_PASSWORD_HASH`, `SESSION_SECRET`, `NODE_ENV=production`, `DB_PATH` and `UPLOADS_DIR` on persistent storage outside the deploy folder; `SEED_DEMO_DATA` unset).
 - [ ] 7.3 DNS: root + `www`; SSL on both. Admin is the `/private-user/` path on the apex, no `private.` subdomain (update.md D-11).
-- [ ] 7.4 Email: info@secureshiptrack.com mailbox + SPF/DKIM/DMARC.
+- [ ] 7.4 Email: info@secureshiptrack.org mailbox + SPF/DKIM/DMARC.
 - [ ] 7.5 Post-deploy smoke test (DEPLOYMENT.md §4, then the §5 launch checklist); set up the backup routine for the DB **and `UPLOADS_DIR`** (package photos, payment proofs). Re-run the update.md §1 payment flow live (update.md I.5).
 
 ---
 
 ## Re-launch (SecureShipTrack, 2026-10-02)
 Done, in four commits on top of the working SDL system (no design, layout, feature or schema changes):
-- **Name, domain, email** (`rebrand:`): `src/config/brand.ts` is the single source; SecureShipTrack / SST / info@secureshiptrack.com / secureshiptrack.com; admin only at `/private-user/` (and localhost; was `private.` until update.md D-11); tracking IDs `SST` + 5 (8 chars); references `SST-SL-`, `SST-TKT-`, `SST-INV-`; DB file `data/app.db`, fresh DB on the new host.
+- **Name, domain, email** (`rebrand:`): `src/config/brand.ts` is the single source; SecureShipTrack / SST / info@secureshiptrack.org / secureshiptrack.org; admin only at `/private-user/` (and localhost; was `private.` until update.md D-11); tracking IDs `SST` + 5 (8 chars); references `SST-SL-`, `SST-TKT-`, `SST-INV-`; DB file `data/app.db`, fresh DB on the new host.
 - **Logo, icons, image paths** (`rebrand:`): new logo (checkerboard cleaned by script), white logo, mark, favicons, OG image; `/images/sdl/` → `/images/site/`.
 - **Photos** (`assets:`): every photo with the old livery replaced with free HD stock (sources logged).
 - **QA** (`chore: re-launch QA`): old-brand sweep of source and build, storage keys and CSS comments renamed, full production-mode run.
@@ -162,9 +162,9 @@ Done, in four commits on top of the working SDL system (no design, layout, featu
 - All 11 public routes load with SecureShipTrack titles; Home at 375 px has no horizontal scroll; all 112 site photos and brand assets return 200.
 - Admin: does not open on the public host; wrong password rejected; login works on `private.`; "SST Operations Console".
 - Create shipment → `SSTTYQBJ` (8 chars, client-supplied ID ignored) → tracked publicly (case-insensitive) → status changed to In transit → shown publicly.
-- Documents: Shipping Label, Receipt, Commercial Invoice, BOL/AWB, Insurance all download as PDFs showing the new logo, "SecureShipTrack", info@secureshiptrack.com and the domain; invoice ref `SST-INV-`.
+- Documents: Shipping Label, Receipt, Commercial Invoice, BOL/AWB, Insurance all download as PDFs showing the new logo, "SecureShipTrack", info@secureshiptrack.org and the domain; invoice ref `SST-INV-`.
 - Quote submitted (`QR-2026-#####`, see #54); contact message → `SST-TKT-######`.
-- `/robots.txt` and `/sitemap.xml` give `https://secureshiptrack.com`; on the admin host robots is `Disallow: /`.
+- `/robots.txt` and `/sitemap.xml` give `https://secureshiptrack.org`; on the admin host robots is `Disallow: /`.
 - Known, not regressions: public pages log 401s from admin-only API calls (#47d); PDFs were checked in Chrome only (#43).
 
 **Needs owner before or soon after go-live:** phone/WhatsApp (#2), HQ address (#3), social links (#9) all stay hidden until supplied; a real transparent logo file (PNG/SVG) from the designer, since the checkerboard was cleaned by script (#49); new admin password hash and session secret set on the host (7.2).
@@ -181,7 +181,7 @@ Done, in four commits on top of the working SDL system (no design, layout, featu
 | 7 | Real partner/carrier logos you're authorised to show (written permission). Home now shows "Modes we connect". | 3.14 |
 | 8 | Certifications/licences you actually hold (e.g. IATA, customs broker licence, ISO) | 3.2, 3.4 |
 | 9 | Social media links | 3.1 |
-| 10 | ~~Admin subdomain name~~ **Resolved: `private.secureshiptrack.com`**, superseded 2026-10-27 by the `/private-user/` path (update.md D-11) | 7.3 |
+| 10 | ~~Admin subdomain name~~ **Resolved: `private.secureshiptrack.org`**, superseded 2026-10-27 by the `/private-user/` path (update.md D-11) | 7.3 |
 | 11 | **Lawyer review of legal pages** (all five tabs, CONTENT §13.1). Drafts are live on `#/legal` with "Last updated: 29 September 2026"; see #37 for the open facts. | 3.11 |
 | 12 | ~~Returns kept only in browser state~~ **Resolved 2026-09-28: a return is its own linked shipment row (`POST /api/shipments/:id/return`).** Still browser-only after a control action: `statusMessage`, the audit log and the hold "frozen" flag (no columns). Decide whether to persist them. | 1.8 follow-up |
 | 13 | Public site shows demo shipments from the client mock (`App.tsx` looks up `mockShipments` before the API), even when the DB has no demo data. Remove with the demo data before launch. | 6.7 |
@@ -234,7 +234,8 @@ Done, in four commits on top of the working SDL system (no design, layout, featu
 ## Decisions log
 | Date | Decision |
 |---|---|
-| 2026-10-27 | Admin console at `https://secureshiptrack.com/private-user/` (owner, update.md D-11). Replaces the `private.` subdomain entries below. Same app, origin and API; noindex + `no-store` on the path; not listed in robots.txt. |
+| 2026-11-20 | Domain moved from `secureshiptrack.com` to **`secureshiptrack.org`** (owner). Email is now `info@secureshiptrack.org`; admin at `https://secureshiptrack.org/private-user/`. |
+| 2026-10-27 | Admin console at `https://secureshiptrack.org/private-user/` (owner, update.md D-11). Replaces the `private.` subdomain entries below. Same app, origin and API; noindex + `no-store` on the path; not listed in robots.txt. |
 | 2026-09-26 | Brand: SDL Global Logistics Ltd; email info@sdlgloballogistics.com; worldwide coverage. |
 | 2026-09-27 | Admin session cookie renamed `dxp.sid` → `sdl.sid` (owner approved signing everyone out once). |
 | 2026-09-27 | ~~Demo shipments keep their current routes until Phase 2: position labels come from `US_METRO_DATABASE`, so intercontinental demo routes would show US city names. Revisit in 1.10 once 2.2/2.3 land.~~ **Superseded 2026-09-28: owner asked for worldwide demo routes now (1.10).** |
@@ -268,6 +269,7 @@ Done, in four commits on top of the working SDL system (no design, layout, featu
 | Date | Task | Note |
 |---|---|---|
 | 2026-09-26 | 0.3b | Codebase walkthrough; System notes added at the bottom of this file. |
+| 2026-11-20 | rebrand | Domain → secureshiptrack.org: `src/config/brand.ts` (DOMAIN, EMAIL), `index.html` canonical/OG/JSON-LD, docs; `server/db.ts` rewrites any stored `secureshiptrack.com` to the new domain at startup. |
 | 2026-09-26 | 0.3 | Baseline recorded: install/build pass (2 warnings), all API flows pass; browser-only checks pending owner. No code changed. |
 | 2026-09-26 | 0.3 / 0.3b | Re-ran the baseline and rewrote the System notes for `6b8185f` (11 upstream commits landed after the first pass). Local branch `sdl-rebrand` created. |
 | 2026-09-26 | 0.3 | Owner confirmed the browser checks. Baseline complete. |
@@ -300,7 +302,7 @@ Done, in four commits on top of the working SDL system (no design, layout, featu
 | 2026-10-02 | Re-launch P3 | **New logo, icons and image paths.** `scripts/optimize-images.mjs` now cleans the painted-in checkerboard from `images/SecureShipTrack Globe Courier Logo.png` (whiteness → alpha with un-blended edges, despeckle) into `images/logo-master.png`, then builds `Public/brand/logo.png`, `logo-white.png`, `mark.png` (1200 px wide) and the six icons (16/32 from the globe/parcel, the rest from the full mark, all on white). `brand.ts` LOGO/LOGO_WHITE, JSON-LD logo (`logo.png`), icon `?v=4` in index.html and the manifest; `sdl-logo*.png` / `sdl-mark.png` deleted; OG image generation removed from the script until Prompt 4. Photo folder `Public/images/sdl/` → `Public/images/site/` (88 files, byte-identical) in the script and ResponsiveImage. Home thermal-label mark box 40×40 → 64×16 (only its size rule; the mark is now 4:1). Verified: build passes; built server on a scratch DB, screenshots at 1440 and 375 px: header 52/40 px, drawer 42 px, footer 56 px, admin sidebar 42 px, invoice preview 72 px, quote print 88 px, the same heights as before, all loaded. Admin login has no logo image (unchanged). |
 | 2026-10-02 | Re-launch P4 | **Branded photos replaced with free HD stock.** Old-brand photos: `landingimage(-mobile).png` (hero-home, hero-home-mobile, track-hero, callback-banner, services-hero, about-hero, OG) and `brand-img1–8.PNG` (track-result-vehicle, contact-team; the rest unused); also removed `logo.jpeg` (old logo) and two Pexels cards with third-party liveries (P&O Nedlloyd/OOCL containers, airline + JAL tug). Nine Pexels originals (2400–8997 px) in `images/free-hd/` with `SOURCES.md`; script entries repointed (crops for hero-home-mobile, about-hero, track-result-vehicle, contact-team), hero output now capped at 2400 px (it used to add the full source width), `og-image.jpg` rebuilt from the new hero + full-colour logo. Alt text updated in Home/Services/About/Track/TrackResult and CONTENT §12. Verified: build passes; built server on a scratch DB, CDP screenshots of Home, Services, About, Track, Track Result, Contact at 375 and 1440 (no horizontal overflow). |
 | 2026-10-02 | Re-launch QA | Final pre-deploy check (see "Re-launch" section). Fixed: Cookie Policy showed old-brand storage keys → `sst_*` (#48); old name in 20 CSS header comments (#52). Verified: build, 33/33 tests, production-mode run in Chrome (public pages, admin host gating, login, create → track → status, 5 PDF types, quote, contact, robots/sitemap). New: #54, #55. |
-| 2026-10-02 | 7.0 (Prompt 7) | **Deployment doc for the new domain.** DEPLOYMENT.md rewritten for secureshiptrack.com, `www`, `private.` (same app) and info@: fresh-history GitHub push (old history kept only in local branch `archive/pre-launch`; `screens/`, CLAUDE.md, PROMPTS.md left out), hPanel checklist (Node ≥ 22.5, install/build/start, env vars, domains, SSL, force HTTPS, mailbox + SPF/DKIM/DMARC), smoke test with exact `robots.txt`/`sitemap.xml` output and the `/api/diag/storage` redeploy check, WAL-safe backup command. Section references updated in the tracker, REBRAND_MAP, `server/db.ts` and `server/seo.ts` (comments only). Nothing deployed. New: #56. |
+| 2026-10-02 | 7.0 (Prompt 7) | **Deployment doc for the new domain.** DEPLOYMENT.md rewritten for secureshiptrack.org, `www`, `private.` (same app) and info@: fresh-history GitHub push (old history kept only in local branch `archive/pre-launch`; `screens/`, CLAUDE.md, PROMPTS.md left out), hPanel checklist (Node ≥ 22.5, install/build/start, env vars, domains, SSL, force HTTPS, mailbox + SPF/DKIM/DMARC), smoke test with exact `robots.txt`/`sitemap.xml` output and the `/api/diag/storage` redeploy check, WAL-safe backup command. Section references updated in the tracker, REBRAND_MAP, `server/db.ts` and `server/seo.ts` (comments only). Nothing deployed. New: #56. |
 | 2026-10-02 | Docs | **README.md added.** Overview, features, stack, setup, env vars, scripts, structure, architecture, API table (access rules checked against `server/routes/*`), tracking-ID/reference formats, deployment summary, docs index, contributing rules. Verified: 33/33 tests, old-brand grep clean. |
 | 2026-10-04 | Cleanup | **Dead code removed, no logic change.** ~120 unused imports (eslint `unused-imports` autofix) and unused locals: write-only state, copy/search handlers never wired to the UI, `totalWeightLbs`, `totalPieces`, `validateStep` in AllShipments, OperationsCenter, CreateShipment, TrackResult. Kept on purpose: `petCollarTag`, `selectedVersionIndex` (setters live in handlers). Verified: build passes, `npm test` 33/33. |
 | 2026-10-04 | Admin | **Admin workspace background.** `.sdl-admin-main-wrapper`: soft brand-red glow top right, ink glow bottom left, fine dot grid, fixed to the viewport (cards unchanged). Verified: built server on a scratch DB, headless screenshots of the logged-in console at 1440/768/375. |

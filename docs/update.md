@@ -15,7 +15,7 @@
 
 ## 1. What this update delivers
 
-0. **Admin console moves to a subfolder.** The console opens at **`https://secureshiptrack.com/private-user/`**
+0. **Admin console moves to a subfolder.** The console opens at **`https://secureshiptrack.org/private-user/`**
    (same app, same domain, same API) instead of the `private.` subdomain. No extra DNS record or SSL certificate.
 1. **Package images with captions.** The admin uploads one or more photos for a shipment and names each one
    (e.g. "iPhone 15 – sealed at origin"). Customers see them on the track page.
@@ -337,7 +337,7 @@ message.
 ## 8. Blocked / Needs owner
 - [ ] **Copy review:** CONTENT.md §6.6 (package images), §6.7 (method names, field labels, network options, warnings, notes, payment card and admin validation messages; added 2026-10-28), §6.8 (payment section, tabs, proof form, messages), §10 (Phase J: `Saving…` / `Changes not saved…`, `State / Region (Optional)`, `Include the country code`, and the two server-error messages, which public pages show too).
 - [ ] **Track page when the server can't be read (J.4):** after the retries, a tracking lookup that gets no readable reply still shows the "not found" state (`App.tsx` / `TrackPage.tsx` treat every error as not found). Showing `We couldn't reach the server just now. Please try again in a moment.` there instead would change the public tracking flow, so it was left alone. Change it?
-- [ ] **Hostinger:** if a `private.` subdomain was already created in hPanel, remove it, or point it at a redirect to `https://secureshiptrack.com/private-user/`. It must not serve the app.
+- [ ] **Hostinger:** if a `private.` subdomain was already created in hPanel, remove it, or point it at a redirect to `https://secureshiptrack.org/private-user/`. It must not serve the app.
 - [x] **`ADMIN_PROXY_TARGET` cleanup:** removed 2026-10-27 (owner said yes): `server/index.ts`, `server/db.ts`, `http-proxy-middleware`, docs.
 - [ ] **Edit Shipment, city the offline lookup doesn't know** (e.g. Kyoto): after J.3 the name is saved but the map position stays (no live geocoding in this form). Accept, or add Nominatim geocoding to the form?
 - [ ] **Deploy (I.5).** Steps in I.5; afterwards check the proof rate limit live (7 attempts from one browser → 429 on the 6th), since it relies on Hostinger's proxy setting the client IP (PROJECT_TRACKER #57).

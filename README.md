@@ -5,7 +5,7 @@
 <h1 align="center">SecureShipTrack</h1>
 
 <p align="center"><strong>Fast, Safe, Reliable</strong><br>
-Website, live shipment tracking and operations console for <a href="https://secureshiptrack.com">secureshiptrack.com</a></p>
+Website, live shipment tracking and operations console for <a href="https://secureshiptrack.org">secureshiptrack.org</a></p>
 
 <p align="center">
   <img alt="Node" src="https://img.shields.io/badge/node-%E2%89%A5%2022.5-339933?logo=node.js&logoColor=white">
@@ -42,9 +42,9 @@ React app. Data lives in a single SQLite file.
 
 | Host | Serves |
 |---|---|
-| `https://secureshiptrack.com` | Public website and shipment tracking |
-| `https://www.secureshiptrack.com` | Same app (redirects to the apex) |
-| `https://secureshiptrack.com/private-user/` | Admin operations console (same app, same API, same database) |
+| `https://secureshiptrack.org` | Public website and shipment tracking |
+| `https://www.secureshiptrack.org` | Same app (redirects to the apex) |
+| `https://secureshiptrack.org/private-user/` | Admin operations console (same app, same API, same database) |
 
 The admin console only opens at `/private-user/` in production, and on `localhost` (`/private-user/` or `#/admin`)
 during development. It never opens on the public domain.
@@ -274,7 +274,7 @@ The site deploys from GitHub to Hostinger as a Node.js web app. Short version:
 1. Node **22.x** (never below 22.5); install command `npm install`; start command `npm start`.
 2. Set `NODE_ENV=production`, `ADMIN_PASSWORD_HASH`, `SESSION_SECRET` and `DB_PATH` in the host panel.
 3. Point `DB_PATH` at a folder **outside** the deploy directory so the database survives redeploys.
-4. Attach `secureshiptrack.com` and `www.` to the **same** app. The admin console is the `/private-user/` path, no
+4. Attach `secureshiptrack.org` and `www.` to the **same** app. The admin console is the `/private-user/` path, no
    subdomain.
 5. Install SSL on both hostnames and force HTTPS. Admin login needs HTTPS in production.
 
@@ -311,4 +311,4 @@ in `images/*/SOURCES.md`.
 
 ---
 
-<p align="center">© SecureShipTrack · <a href="mailto:info@secureshiptrack.com">info@secureshiptrack.com</a></p>
+<p align="center">© SecureShipTrack · <a href="mailto:info@secureshiptrack.org">info@secureshiptrack.org</a></p>

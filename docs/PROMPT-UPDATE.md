@@ -28,7 +28,7 @@ Then state in 3–5 lines: which task you're doing, which files you'll change, a
 
 ## Mission
 
-1. **Admin console at `https://secureshiptrack.com/private-user/`** instead of the `private.` subdomain. Same
+1. **Admin console at `https://secureshiptrack.org/private-user/`** instead of the `private.` subdomain. Same
    app, origin and API. The public site never opens the console; `#/admin` keeps working on localhost only.
 2. **Package images with captions.** The admin uploads photos for a shipment and names each one; the public track
    page shows the visible ones.

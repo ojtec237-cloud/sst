@@ -23,9 +23,9 @@ If a prompt would change how a page looks (apart from the logo and the photos th
 | Company name (UI) | `SecureShipTrack` | |
 | Short name | `SST` | Used in the console title ("SST Operations Console"), "SST Operations Centre", etc. |
 | Registered legal name | `SecureShipTrack` | Shown in the footer, legal pages and PDFs (no "Ltd"). |
-| Domain | `secureshiptrack.com` | Public site: `https://secureshiptrack.com` (+ `www`). |
-| Primary email | `info@secureshiptrack.com` | |
-| Admin subdomain | `private` | Admin console: **`https://private.secureshiptrack.com`** only (plus `#/admin` on localhost). |
+| Domain | `secureshiptrack.org` | Public site: `https://secureshiptrack.org` (+ `www`). |
+| Primary email | `info@secureshiptrack.org` | |
+| Admin subdomain | `private` | Admin console: **`https://private.secureshiptrack.org`** only (plus `#/admin` on localhost). |
 | Tracking ID prefix | `SST` | 3 letters + 5 characters = 8, e.g. `SST7K2M9`. |
 | Reference prefix | `SST` | `SST-SL-######` (seal), `SST-TKT-######` (ticket), `SST-INV-######` (invoice). |
 | Tagline | `Fast, Safe, Reliable` | Same as before, and it's in the new logo. |

@@ -17,8 +17,8 @@ ship a page with a visible `{{…}}`. Hide the element if the value is missing.
 |---|---|
 | `{{COMPANY}}` | SecureShipTrack |
 | `{{LEGAL_NAME}}` | SecureShipTrack |
-| `{{EMAIL}}` | info@secureshiptrack.com |
-| `{{DOMAIN}}` | secureshiptrack.com |
+| `{{EMAIL}}` | info@secureshiptrack.org |
+| `{{DOMAIN}}` | secureshiptrack.org |
 | `{{PHONE}}` / `{{WHATSAPP}}` | TBD (owner) |
 | `{{HQ_ADDRESS}}` | TBD (owner) |
 | `{{YEAR_FOUNDED}}` | TBD (owner). If unknown, remove the "years" stat |

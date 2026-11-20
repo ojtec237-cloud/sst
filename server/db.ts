@@ -37,10 +37,12 @@ const OLD_BRAND_TEXT: [RegExp, string][] = [
   // numbers (WVL-INV-104233) are record keys and stay as stored: no word boundary after "WVL" in
   // an ID, and a reference continues with "-".
   [/\bWVL\b(?!-)/g, COMPANY_SHORT],
+  // SecureShipTrack moved from the .com to the .org domain (emails keep their mailbox name).
+  [/secureshiptrack\.com\b/gi, DOMAIN],
 ];
 
 // Cheap pre-filter for the rows OLD_BRAND_TEXT may change (lower-cased LIKE patterns).
-const OLD_BRAND_LIKE = ['%duolingo%', '%sdl global%', '%sdlgloballogistics%', '%vexa%', '%wvl%'];
+const OLD_BRAND_LIKE = ['%duolingo%', '%sdl global%', '%sdlgloballogistics%', '%vexa%', '%wvl%', '%secureshiptrack.com%'];
 
 // Rewrites old-brand wording in every text column of every table. Runs at startup; rows
 // without the old brand are never touched, so after the first run it only reads.
