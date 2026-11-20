@@ -330,7 +330,7 @@ export const CreateShipmentView: React.FC<CreateShipmentViewProps> = ({
   // STEP 7 / Creation State
   // ----------------------------------------------------
   // Set from the server's response on create: the server assigns every tracking ID
-  // (BRAND_GUIDE §7). Until then the UI shows the WVL····· placeholder.
+  // (BRAND_GUIDE §7). Until then the UI shows the SST····· placeholder.
   const [generatedTrackingNumber, setGeneratedTrackingNumber] = useState<string>('');
   const [createdShipmentRecord, setCreatedShipmentRecord] = useState<Shipment | null>(null);
   const [isCopied, setIsCopied] = useState(false);
@@ -748,7 +748,7 @@ export const CreateShipmentView: React.FC<CreateShipmentViewProps> = ({
       finalPrice
     };
     try {
-      localStorage.setItem('wvl_admin_shipment_draft', JSON.stringify(draftData));
+      localStorage.setItem('sst_admin_shipment_draft', JSON.stringify(draftData));
       setDraftSavedToast('Draft manifest saved to local session.');
       setTimeout(() => setDraftSavedToast(null), 3000);
     } catch {
@@ -781,7 +781,7 @@ export const CreateShipmentView: React.FC<CreateShipmentViewProps> = ({
       return;
     }
     setIsCreatingShipment(true);
-    // Piece labels (WVLxxxxx-NN) are stamped from the server-assigned ID in createShipment.
+    // Piece labels (SSTxxxxx-NN) are stamped from the server-assigned ID in createShipment.
     const formattedPieces = shipmentType === 'Vehicle'
       ? [
           {

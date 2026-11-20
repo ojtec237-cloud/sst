@@ -6,7 +6,7 @@ import os from 'os';
 import path from 'path';
 
 // A scratch UPLOADS_DIR, set before the module reads it.
-const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'wvl-uploads-'));
+const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'sst-uploads-'));
 process.env.UPLOADS_DIR = scratch;
 const {
   MAX_UPLOAD_BYTES, UploadError, decodeImageUpload, deleteUpload, detectImageType,

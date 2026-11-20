@@ -4,13 +4,13 @@
 // Contact values left as '' are not known yet. UI that would show them must hide itself
 // (see useCompanyContact). Never fill these with made-up numbers or addresses.
 
-export const COMPANY = 'World Vexa Logistics';
-export const COMPANY_SHORT = 'WVL';
-export const LEGAL_NAME = 'World Vexa Logistics';
+export const COMPANY = 'SecureShipTrack';
+export const COMPANY_SHORT = 'SST';
+export const LEGAL_NAME = 'SecureShipTrack';
 export const TAGLINE = 'Fast, Safe, Reliable';
 
-export const EMAIL = 'info@worldvexalogistics.com';
-export const DOMAIN = 'worldvexalogistics.com';
+export const EMAIL = 'info@secureshiptrack.com';
+export const DOMAIN = 'secureshiptrack.com';
 export const SITE_URL = `https://${DOMAIN}`;
 
 // Logo files in Public/brand (BRAND_GUIDE §6). Full colour on light surfaces, white on Ink.
@@ -42,7 +42,7 @@ export const OPERATIONS_CENTRE = `${COMPANY_SHORT} Operations Centre`;
 export const INTAKE_DESK = `${COMPANY_SHORT} Intake Desk`;
 
 // Tracking ID = prefix + 5 characters, 8 total (BRAND_GUIDE §7).
-export const TRACKING_PREFIX = 'WVL';
+export const TRACKING_PREFIX = 'SST';
 // The sample ID shown in placeholders, help text and the home-page label mock-up.
 export const EXAMPLE_TRACKING_ID = `${TRACKING_PREFIX}7K2M9`;
 

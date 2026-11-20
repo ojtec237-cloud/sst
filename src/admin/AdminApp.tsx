@@ -47,7 +47,7 @@ export const AdminApp: React.FC<AdminAppProps> = ({ onNavigatePublic, onViewPubl
 
   // Proofs of payment waiting for review (update.md H.1): polled every 30 s while the tab is
   // visible, again when it comes back into view, and after every review. A waiting proof this
-  // browser hasn't announced yet raises a toast (H.3); seen ids live in wvl_seen_proofs.
+  // browser hasn't announced yet raises a toast (H.3); seen ids live in sst_seen_proofs.
   const [submittedProofsCount, setSubmittedProofsCount] = useState(0);
   const [proofToast, setProofToast] = useState<{ count: number; trackingNumber: string } | null>(null);
   const seenProofsRef = useRef<string[]>([]);

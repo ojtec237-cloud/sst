@@ -40,7 +40,7 @@ test('a read is retried twice on a non-JSON reply or a dropped connection, then 
 
 test('a read that never gets JSON fails with the plain message and logs status, type and body start', async () => {
   replies = [html(200), html(200), html(200)];
-  await assert.rejects(api.trackShipment('WVL7K2M9'), (err: any) =>
+  await assert.rejects(api.trackShipment('SST7K2M9'), (err: any) =>
     err.message === READ_FAILED_MESSAGE && err.code === 'NON_JSON' && err.status === 200);
   assert.equal(calls.length, 3);
   const [, detail] = logged[0] as [string, any];
@@ -51,7 +51,7 @@ test('a read that never gets JSON fails with the plain message and logs status, 
 
 test('a write is sent once and reports that it could not be confirmed', async () => {
   replies = [html(200), json({ success: true, data: {} })];
-  await assert.rejects(api.updateShipment('WVL7K2M9', { cargoDescription: 'Box' }), (err: any) =>
+  await assert.rejects(api.updateShipment('SST7K2M9', { cargoDescription: 'Box' }), (err: any) =>
     err.message === WRITE_UNCONFIRMED_MESSAGE && err.code === 'NON_JSON');
   assert.equal(calls.length, 1);
 
@@ -64,7 +64,7 @@ test('a write is sent once and reports that it could not be confirmed', async ()
 
 test('JSON errors keep the server message, status, code and field errors, without retrying', async () => {
   replies = [json({ success: false, error: 'Proof not accepted', code: 'NOT_ACCEPTING', errors: { amountSent: 'Too high' } }, 409)];
-  await assert.rejects(api.submitPaymentProof('WVL7K2M9', {} as any), (err: any) =>
+  await assert.rejects(api.submitPaymentProof('SST7K2M9', {} as any), (err: any) =>
     err.message === 'Proof not accepted' && err.status === 409 && err.code === 'NOT_ACCEPTING' && err.errors.amountSent === 'Too high');
   replies = [json({ success: false, error: 'Authentication required' }, 401)];
   await assert.rejects(api.getShipments(), (err: any) => err.status === 401 && err.message === 'Authentication required');
@@ -87,8 +87,8 @@ test('special cases keep their behaviour: 404 quote is null, convert returns the
   replies = [{ status: 404, body: 'Not found' }];
   assert.equal(await api.getPublicQuote('q404'), null);
 
-  replies = [json({ success: true, trackingNumber: 'WVL7K2M9', data: { tracking_number: 'WVL7K2M9' } })];
-  assert.deepEqual(await api.convertQuoteToShipment('q1'), { trackingNumber: 'WVL7K2M9', data: { tracking_number: 'WVL7K2M9' } });
+  replies = [json({ success: true, trackingNumber: 'SST7K2M9', data: { tracking_number: 'SST7K2M9' } })];
+  assert.deepEqual(await api.convertQuoteToShipment('q1'), { trackingNumber: 'SST7K2M9', data: { tracking_number: 'SST7K2M9' } });
 
   replies = ['drop'];
   await assert.rejects(api.login('x'), /Can't reach the server/);

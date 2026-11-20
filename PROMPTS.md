@@ -20,16 +20,16 @@ If a prompt would change how a page looks (apart from the logo and the photos th
 
 | Field | New value | Notes |
 |---|---|---|
-| Company name (UI) | `World Vexa Logistics` | |
-| Short name | `WVL` | Used in the console title ("WVL Operations Console"), "WVL Operations Centre", etc. |
-| Registered legal name | `World Vexa Logistics` | Shown in the footer, legal pages and PDFs (no "Ltd"). |
-| Domain | `worldvexalogistics.com` | Public site: `https://worldvexalogistics.com` (+ `www`). |
-| Primary email | `info@worldvexalogistics.com` | |
-| Admin subdomain | `private` | Admin console: **`https://private.worldvexalogistics.com`** only (plus `#/admin` on localhost). |
-| Tracking ID prefix | `WVL` | 3 letters + 5 characters = 8, e.g. `WVL7K2M9`. |
-| Reference prefix | `WVL` | `WVL-SL-######` (seal), `WVL-TKT-######` (ticket), `WVL-INV-######` (invoice). |
+| Company name (UI) | `SecureShipTrack` | |
+| Short name | `SST` | Used in the console title ("SST Operations Console"), "SST Operations Centre", etc. |
+| Registered legal name | `SecureShipTrack` | Shown in the footer, legal pages and PDFs (no "Ltd"). |
+| Domain | `secureshiptrack.com` | Public site: `https://secureshiptrack.com` (+ `www`). |
+| Primary email | `info@secureshiptrack.com` | |
+| Admin subdomain | `private` | Admin console: **`https://private.secureshiptrack.com`** only (plus `#/admin` on localhost). |
+| Tracking ID prefix | `SST` | 3 letters + 5 characters = 8, e.g. `SST7K2M9`. |
+| Reference prefix | `SST` | `SST-SL-######` (seal), `SST-TKT-######` (ticket), `SST-INV-######` (invoice). |
 | Tagline | `Fast, Safe, Reliable` | Same as before, and it's in the new logo. |
-| New logo file | `images/World Vexa Logistics Logo.png` | 2024×777, red/black. **It has a fake checkerboard "transparency" painted in.** Prompt 3 removes it; a real transparent PNG/SVG from the designer would be better. |
+| New logo file | `images/SecureShipTrack Globe Courier Logo.png` | 2024×777, red/black. **It has a fake checkerboard "transparency" painted in.** Prompt 3 removes it; a real transparent PNG/SVG from the designer would be better. |
 | Photos | Replace every photo showing the old brand | Free HD/4K stock (Pexels / Unsplash / Pixabay licences). Prompt 4. |
 | Phone / WhatsApp / address / socials | *(leave blank)* | Stay hidden until supplied. Never invented. |
 

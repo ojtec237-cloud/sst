@@ -243,7 +243,7 @@ export const PaymentRequestEditor: React.FC<PaymentRequestEditorProps> = ({ valu
               type="text"
               maxLength={CHARGE_REASON_MAX}
               value={value.chargeReason}
-              placeholder="e.g. Customs duty – Invoice WVL-INV-104233"
+              placeholder="e.g. Customs duty – Invoice SST-INV-104233"
               onChange={(e) => set({ chargeReason: e.target.value })}
               {...describe('chargeReason', !!fieldError('chargeReason'))}
             />

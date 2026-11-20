@@ -1,5 +1,6 @@
 // Prepares brand assets and responsive photos from the untouched originals in images/.
 // Run with: node scripts/optimize-images.mjs            (everything)
+//           node scripts/optimize-images.mjs --brand    (logos, icons and OG image only)
 //           node scripts/optimize-images.mjs --icons    (favicon and app icons only)
 // Outputs: Public/brand/* (logos and icons), images/logo-master.png (clean transparent logo),
 // Public/images/site/* (WebP + JPG per width) and src/data/sdlImages.ts (the manifest <ResponsiveImage> reads).
@@ -24,36 +25,17 @@ fs.mkdirSync(BRAND_OUT, { recursive: true });
 fs.mkdirSync(PHOTO_OUT, { recursive: true });
 
 // ---------------------------------------------------------------------------------------------
-// Logo: the supplied PNG has no real alpha. A grey/white checkerboard (~236 and ~254) is painted
-// behind the artwork, and the globe's "ocean" and the keylines around the globe and parcel are
-// the same light neutrals. The artwork itself is only red and black ink, so every light neutral
-// pixel is background. Alpha comes from each pixel's "whiteness" (its lowest channel): red and
-// black ink sit far below LOGO_INK, the checkerboard sits at or above LOGO_PAPER. Edge pixels in
-// between are un-blended from white so anti-aliased edges keep their true colour (no grey fringe).
+// Logo: the supplied PNG already has real transparency (black and red ink, a white keyline around
+// the globe). It is used as-is: the only clean-up is clearing isolated faint specks of texture
+// noise outside the artwork, then trimming the empty margin.
 // ---------------------------------------------------------------------------------------------
-const LOGO_SRC = path.join(SRC, 'World Vexa Logistics Logo.png');
-const LOGO_INK = 96; // at or below this whiteness a pixel is fully opaque
-const LOGO_PAPER = 222; // at or above this it is background (the darker checker squares are ~233)
+const LOGO_SRC = path.join(SRC, 'SecureShipTrack Globe Courier Logo.png');
 const SPECK_MAX = 24; // isolated faint blobs up to this many pixels are leftover noise
 
 async function cleanLogo(input) {
-  const { data, info } = await sharp(input).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-  const { width, height } = info;
-  const out = Buffer.alloc(width * height * 4);
-  for (let i = 0, j = 0; i < data.length; i += 3, j += 4) {
-    const r = data[i], g = data[i + 1], b = data[i + 2];
-    const whiteness = Math.min(r, g, b);
-    const a = whiteness <= LOGO_INK ? 1 : whiteness >= LOGO_PAPER ? 0 : (LOGO_PAPER - whiteness) / (LOGO_PAPER - LOGO_INK);
-    if (a > 0) {
-      // Un-blend from white so edge pixels keep their true colour.
-      out[j] = Math.max(0, Math.min(255, Math.round((r - 255 * (1 - a)) / a)));
-      out[j + 1] = Math.max(0, Math.min(255, Math.round((g - 255 * (1 - a)) / a)));
-      out[j + 2] = Math.max(0, Math.min(255, Math.round((b - 255 * (1 - a)) / a)));
-    }
-    out[j + 3] = Math.round(a * 255);
-  }
-  despeckle(out, width, height);
-  return sharp(out, { raw: { width, height, channels: 4 } }).png().toBuffer();
+  const { data, info } = await sharp(input).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  despeckle(data, info.width, info.height);
+  return sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toBuffer();
 }
 
 // Clears small connected blobs of non-zero alpha that are not part of the artwork.
@@ -119,16 +101,27 @@ async function toSquare(pngBuffer) {
     .png().toBuffer();
 }
 
-// The "WV" + globe/parcel symbol: the top band of the logo, without the speed lines on the left
-// and the wordmark below. Measured on the 2024x777 source: empty columns 392-396 separate the
-// speed lines from the W, empty rows 415-436 separate the symbol from "WORLD".
-const MARK_BOX = { left: 394, top: 0, width: 2024 - 394, height: 426 };
+// The "SST" + globe/parcel symbol: the top band of the logo, without the speed lines on the left
+// and the wordmark below. Measured on the 2172x724 source: row 391 is empty between the symbol and
+// "SECURESHIPTRACK". The red speed lines run into the first S (no empty column between them), so
+// red ink left of SPEED_LINES_END (where the only red is the speed lines) is cleared instead.
+const MARK_BOX = { left: 0, top: 0, width: 2172, height: 391 };
+const SPEED_LINES_END = 560;
 async function buildMark(source) {
-  const clean = await cleanLogo(source);
-  return sharp(await sharp(clean).extract(MARK_BOX).png().toBuffer()).trim({ threshold: 1 }).png().toBuffer();
+  const { data, info } = await sharp(await cleanLogo(source)).extract(MARK_BOX).raw().toBuffer({ resolveWithObject: true });
+  for (let y = 0; y < info.height; y++) {
+    for (let x = 0; x < SPEED_LINES_END; x++) {
+      const i = (y * info.width + x) * 4;
+      const red = redness(data[i], data[i + 1], data[i + 2]);
+      if (red >= RED_MIN) data[i + 3] = 0;
+      else if (red >= RED_MIN / 2) data[i + 3] = Math.round(data[i + 3] * (RED_MIN - red) / (RED_MIN / 2)); // soft edge
+    }
+  }
+  const mark = await sharp(data, { raw: { width: info.width, height: info.height, channels: 4 } }).png().toBuffer();
+  return sharp(mark).trim({ threshold: 1 }).png().toBuffer();
 }
 
-// The globe, orbit arrow and parcel alone (the red parts of the mark), squared. The full "WV"
+// The globe, orbit arrow and parcel alone (the red parts of the mark), squared. The full "SST"
 // mark is about 4:1, so in a square tab icon it would be ~4 px tall at 16 px; tiny icons use this.
 async function buildGlobe(mark) {
   return toSquare(await sharp(await redOnly(mark)).trim({ threshold: 1 }).png().toBuffer());
@@ -136,7 +129,7 @@ async function buildGlobe(mark) {
 
 // Browser, home-screen and PWA icons, all rendered from the mark at their exact size (never
 // resized from another icon). `inset` is the share of the canvas width the artwork may fill;
-// `art` picks the full "WV" mark or its globe/parcel. The mark has black letterforms that vanish
+// `art` picks the full "SST" mark or its globe/parcel. The mark has black letterforms that vanish
 // on dark launchers and tabs, so every icon sits on white (a rounded tile where the OS doesn't
 // mask the icon itself).
 const CLEAR = { r: 0, g: 0, b: 0, alpha: 0 };
@@ -296,9 +289,13 @@ export type SdlImageName = keyof typeof SDL_IMAGES;
 }
 
 // --icons rebuilds only the icon set, leaving the logos, OG image and photos untouched.
+// --brand rebuilds the logos, icons and OG image, leaving the photos untouched.
 if (process.argv.includes('--icons')) {
   await buildIcons(await buildMark(LOGO_SRC));
   console.log('Icons done.');
+} else if (process.argv.includes('--brand')) {
+  await buildBrand();
+  console.log('Brand done.');
 } else {
   await buildBrand();
   const manifest = await buildPhotos();

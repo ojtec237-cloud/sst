@@ -1,4 +1,4 @@
-# Deployment: GitHub → Hostinger (World Vexa Logistics)
+# Deployment: GitHub → Hostinger (SecureShipTrack)
 
 The app is **one Node.js process**. Express serves the API (`/api/*`) and the built React site (`dist/`), and keeps its
 data in **one SQLite file**. The public site and the admin console are the **same app** answering on different
@@ -6,9 +6,9 @@ hostnames:
 
 | Host | Serves |
 |---|---|
-| `https://worldvexalogistics.com` | Public site (canonical: `index.html`, `robots.txt` and `sitemap.xml` all use the apex) |
-| `https://www.worldvexalogistics.com` | Same app; ideally a 301 redirect to the apex |
-| `https://worldvexalogistics.com/private-user/` | Admin console (`ADMIN_PATH` in `src/config/brand.ts`), same app, same origin, same API, same database. There is no `private.` subdomain (update.md D-11) |
+| `https://secureshiptrack.com` | Public site (canonical: `index.html`, `robots.txt` and `sitemap.xml` all use the apex) |
+| `https://www.secureshiptrack.com` | Same app; ideally a 301 redirect to the apex |
+| `https://secureshiptrack.com/private-user/` | Admin console (`ADMIN_PATH` in `src/config/brand.ts`), same app, same origin, same API, same database. There is no `private.` subdomain (update.md D-11) |
 
 The new host starts with a **fresh, empty database**. Nothing is migrated from the old site.
 
@@ -28,8 +28,8 @@ Hostinger's hPanel screens change from time to time. If a label below doesn't ma
 
 ## 2. GitHub: new repo with fresh history
 
-Create an empty **private** repo on GitHub first (no README, no .gitignore, no licence), e.g. `world-vexa-logistics`.
-With the GitHub CLI: `gh repo create <you>/world-vexa-logistics --private`.
+Create an empty **private** repo on GitHub first (no README, no .gitignore, no licence), e.g. `secureshiptrack`.
+With the GitHub CLI: `gh repo create <you>/secureshiptrack --private`.
 
 Then, in the project folder (works in PowerShell and Git Bash; the one line that differs is marked):
 
@@ -47,12 +47,12 @@ git rm -r --cached --quiet screens CLAUDE.md PROMPTS.md   # files stay on disk, 
 Add-Content .gitignore "/screens/"                         # PowerShell
 # echo "/screens/" >> .gitignore                           # Git Bash instead of the line above
 git add .gitignore
-git commit -m "World Vexa Logistics: initial import"
+git commit -m "SecureShipTrack: initial import"
 git branch -M main              # the fresh branch becomes main; the old history stays in archive/pre-launch
 
 # 3. Point at the new repo and push main only
 git remote remove origin
-git remote add origin https://github.com/<you>/world-vexa-logistics.git
+git remote add origin https://github.com/<you>/secureshiptrack.git
 git push -u origin main
 
 # 4. Check
@@ -66,7 +66,8 @@ listed in `.gitignore` (internal working notes). `.env`, `data/`, `node_modules/
 ignored as before. `images/` (logo master and stock-photo originals with their `SOURCES.md`) stays in, since
 `scripts/optimize-images.mjs` builds `Public/` from it.
 
-> The current `origin` is `github.com/ojrandy/WVL`. If that is meant to be the new repo, only push to it if it is
+> The `origin` of this copy still points at the previous site's repo, which stays live: never push SecureShipTrack there.
+> Point `origin` at a new repo (`git remote set-url origin <new-repo-url>`). A new repo must be
 > **empty**. If it already holds the old history, create a new repo instead (or delete and recreate it yourself).
 
 From now on, work and push from this folder as usual: `git push` on `main` → Hostinger redeploys.
@@ -75,8 +76,8 @@ From now on, work and push from this folder as usual: `git push` on `main` → H
 
 ### 3.1 Create the Node.js app
 - [ ] hPanel → **Websites → Add website → Node.js app** (on some plans: *Advanced → Node.js*).
-- [ ] Choose **Import Git repository**, authorise GitHub, pick `<you>/world-vexa-logistics`, branch **`main`**.
-- [ ] Domain: **`worldvexalogistics.com`**.
+- [ ] Choose **Import Git repository**, authorise GitHub, pick `<you>/secureshiptrack`, branch **`main`**.
+- [ ] Domain: **`secureshiptrack.com`**.
 - [ ] Settings:
 
 | Setting | Value |
@@ -97,8 +98,8 @@ From now on, work and push from this folder as usual: `git push` on `main` → H
 | `NODE_ENV` | `production` |
 | `ADMIN_PASSWORD_HASH` | bcrypt hash of the **new** admin password (see below) |
 | `SESSION_SECRET` | 64 hex characters (see below) |
-| `DB_PATH` | a `.db` file in a folder **outside** the app/deploy directory, e.g. `/home/<hostinger-user>/wvl-data/app.db` |
-| `UPLOADS_DIR` | a folder **outside** the app/deploy directory for uploaded photos and payment proofs, e.g. `/home/<hostinger-user>/wvl-data/uploads` (unset = `uploads` next to the `DB_PATH` file) |
+| `DB_PATH` | a `.db` file in a folder **outside** the app/deploy directory, e.g. `/home/<hostinger-user>/sst-data/app.db` |
+| `UPLOADS_DIR` | a folder **outside** the app/deploy directory for uploaded photos and payment proofs, e.g. `/home/<hostinger-user>/sst-data/uploads` (unset = `uploads` next to the `DB_PATH` file) |
 | `SEED_DEMO_DATA` | **unset** (it does nothing any more; demo data was removed) |
 | `PORT` | unset, unless the panel asks for it |
 
@@ -119,7 +120,7 @@ values. Changing the admin password later = new hash in hPanel + restart; no cod
 
 About `DB_PATH`: the server creates the folder and the file on first start. Find your home path in hPanel (File
 Manager shows `/home/u123456789/…`). Pick a folder that is **not** under the app's own directory (e.g. not inside
-`domains/worldvexalogistics.com/…`), because a git redeploy may replace that directory. If your plan offers a path
+`domains/secureshiptrack.com/…`), because a git redeploy may replace that directory. If your plan offers a path
 described as persistent storage, use that. §4 step 5 proves whether it survives.
 
 About `UPLOADS_DIR`: the same rule. The server creates it with `images/` (package photos, public when marked
@@ -127,38 +128,38 @@ visible) and `proofs/` (payment screenshots, admin-only) on start-up. Keep it be
 folder, and back it up with the database (§6).
 
 - [ ] Save the variables, then **restart / redeploy** the app so it picks them up.
-- [ ] Check the app log: it should print the World Vexa start-up banner and **no**
+- [ ] Check the app log: it should print the SecureShipTrack start-up banner and **no**
   `SESSION_SECRET is not set` error.
 
 ### 3.3 Domains: apex + www on the SAME app
-- [ ] `worldvexalogistics.com` attached to the Node app (done in 3.1).
-- [ ] `www.worldvexalogistics.com`: attached to the same app, ideally as a **301 redirect to the apex** (the canonical
+- [ ] `secureshiptrack.com` attached to the Node app (done in 3.1).
+- [ ] `www.secureshiptrack.com`: attached to the same app, ideally as a **301 redirect to the apex** (the canonical
   URL, OG tags and sitemap all use the apex). If the panel can only serve both, that also works; the canonical tag
   covers it.
-- [ ] **No admin subdomain.** The console is a path on the apex, `https://worldvexalogistics.com/private-user/`, so it
+- [ ] **No admin subdomain.** The console is a path on the apex, `https://secureshiptrack.com/private-user/`, so it
   needs no extra domain, DNS record or certificate. If a `private.` subdomain was already created in hPanel, remove
-  it, or make it a redirect to `https://worldvexalogistics.com/private-user/`. It must not serve the app.
+  it, or make it a redirect to `https://secureshiptrack.com/private-user/`. It must not serve the app.
 - [ ] DNS (if the domain uses Hostinger nameservers this is automatic; otherwise at your registrar): apex `A` record and
   `www` record pointing to what hPanel shows for the app. Wait for DNS (minutes to a few hours).
 
 ### 3.4 SSL and HTTPS
-- [ ] hPanel → **Security → SSL**: install the free SSL certificate for **both**: `worldvexalogistics.com` and
-  `www.worldvexalogistics.com`.
+- [ ] hPanel → **Security → SSL**: install the free SSL certificate for **both**: `secureshiptrack.com` and
+  `www.secureshiptrack.com`.
 - [ ] Turn on **Force HTTPS** for the domain.
-- [ ] Check: `http://worldvexalogistics.com` and `http://worldvexalogistics.com/private-user/` both redirect to `https://`.
+- [ ] Check: `http://secureshiptrack.com` and `http://secureshiptrack.com/private-user/` both redirect to `https://`.
 
 Login only works over HTTPS in production (secure cookie; the server already trusts Hostinger's proxy for this).
 
-### 3.5 Email: info@worldvexalogistics.com
-- [ ] hPanel → **Emails**: set up Hostinger Email for `worldvexalogistics.com` (or Google Workspace) and create the
-  mailbox **`info@worldvexalogistics.com`**.
+### 3.5 Email: info@secureshiptrack.com
+- [ ] hPanel → **Emails**: set up Hostinger Email for `secureshiptrack.com` (or Google Workspace) and create the
+  mailbox **`info@secureshiptrack.com`**.
 - [ ] DNS records (hPanel adds them automatically on Hostinger nameservers; check under **Emails → DNS / Connect
   domain**):
   - **MX**: the provider's MX records (Hostinger: `mx1.hostinger.com`, `mx2.hostinger.com`).
   - **SPF** (TXT on `@`): `v=spf1 include:_spf.mail.hostinger.com ~all` (Google Workspace: `include:_spf.google.com`).
     Only **one** SPF record per domain.
   - **DKIM**: the TXT/CNAME record the provider shows.
-  - **DMARC** (TXT on `_dmarc`): `v=DMARC1; p=quarantine; rua=mailto:info@worldvexalogistics.com`
+  - **DMARC** (TXT on `_dmarc`): `v=DMARC1; p=quarantine; rua=mailto:info@secureshiptrack.com`
 - [ ] Send a test mail from info@ to a Gmail address → open it → **Show original**: SPF, DKIM and DMARC all `PASS`.
 - [ ] Reply from Gmail to info@ and confirm it arrives.
 
@@ -167,33 +168,33 @@ Login only works over HTTPS in production (secure cookie; the server already tru
 Run in this order on the live domains. Use a private/incognito window for the browser checks.
 
 **1. Site loads on the apex and www**
-- [ ] `https://worldvexalogistics.com` loads Home, padlock shown, title "World Vexa Logistics", new logo, no console errors.
-- [ ] `https://www.worldvexalogistics.com` redirects to the apex (or loads the same site).
-- [ ] `https://worldvexalogistics.com/api/health` → `{"status":"ok","service":"World Vexa Logistics API",…}`.
+- [ ] `https://secureshiptrack.com` loads Home, padlock shown, title "SecureShipTrack", new logo, no console errors.
+- [ ] `https://www.secureshiptrack.com` redirects to the apex (or loads the same site).
+- [ ] `https://secureshiptrack.com/api/health` → `{"status":"ok","service":"SecureShipTrack API",…}`.
 
 **2. Admin opens ONLY at `/private-user/`**
-- [ ] `https://worldvexalogistics.com/#/admin` → shows **Home**, not the admin login.
-- [ ] `https://www.worldvexalogistics.com/#/admin` → also Home.
-- [ ] `https://worldvexalogistics.com/private-user/` → admin login, "WVL Operations Console".
-- [ ] `https://worldvexalogistics.com/private-user` (no trailing slash) → redirects to `/private-user/`.
+- [ ] `https://secureshiptrack.com/#/admin` → shows **Home**, not the admin login.
+- [ ] `https://www.secureshiptrack.com/#/admin` → also Home.
+- [ ] `https://secureshiptrack.com/private-user/` → admin login, "SST Operations Console".
+- [ ] `https://secureshiptrack.com/private-user` (no trailing slash) → redirects to `/private-user/`.
 - [ ] The admin path is hidden from search engines and never cached: in PowerShell
-  `curl.exe -sI https://worldvexalogistics.com/private-user/` → `X-Robots-Tag: noindex, nofollow` and
-  `Cache-Control: no-store, private`. The same command on `https://worldvexalogistics.com/` shows **no** `X-Robots-Tag`.
+  `curl.exe -sI https://secureshiptrack.com/private-user/` → `X-Robots-Tag: noindex, nofollow` and
+  `Cache-Control: no-store, private`. The same command on `https://secureshiptrack.com/` shows **no** `X-Robots-Tag`.
 
 **3. Login with the new password**
 - [ ] A wrong password is rejected.
 - [ ] The new password logs in, and reloading the page keeps you logged in (proves the secure cookie works behind HTTPS).
 
 **4. Create a shipment and track it**
-- [ ] Admin → create a shipment → it gets an ID of exactly 8 characters: `WVL` + 5 (e.g. `WVL7K2M9`). Write it down.
-- [ ] On `https://worldvexalogistics.com` → Track → enter the ID → the shipment shows (also in lower case).
-- [ ] `WVL7K2M9` (the example ID from the help text) says **not found**: there is no demo data.
-- [ ] Download one document (e.g. the label or invoice): new logo, "World Vexa Logistics", info@worldvexalogistics.com.
+- [ ] Admin → create a shipment → it gets an ID of exactly 8 characters: `SST` + 5 (e.g. `SST7K2M9`). Write it down.
+- [ ] On `https://secureshiptrack.com` → Track → enter the ID → the shipment shows (also in lower case).
+- [ ] `SST7K2M9` (the example ID from the help text) says **not found**: there is no demo data.
+- [ ] Download one document (e.g. the label or invoice): new logo, "SecureShipTrack", info@secureshiptrack.com.
 
 **5. The database survives a redeploy (`/api/diag/storage`)**
 
 This endpoint is temporary and admin-only, so open it in the browser where you're logged in at `/private-user/`:
-- [ ] Open `https://worldvexalogistics.com/api/diag/storage`. Note `markerFirstSeen`. Check that `dataDir` is
+- [ ] Open `https://secureshiptrack.com/api/diag/storage`. Note `markerFirstSeen`. Check that `dataDir` is
   the folder from your `DB_PATH` and `databaseFileExists` is `true`. Check that `uploadsDir` is the folder from your
   `UPLOADS_DIR` (or `uploads` next to the database) and `uploadsDirExists` is `true`.
 - [ ] Redeploy: push a commit (`git commit --allow-empty -m "chore: redeploy test"` + `git push`) or use the panel's
@@ -207,26 +208,26 @@ If `markerFirstSeen` changed or the shipment is gone, the storage is **not** per
 `/api/diag/storage` in a separate commit.
 
 **6. robots.txt and sitemap.xml**
-- [ ] `https://worldvexalogistics.com/robots.txt` is exactly:
+- [ ] `https://secureshiptrack.com/robots.txt` is exactly:
   ```
   User-agent: *
   Disallow: /api/
 
-  Sitemap: https://worldvexalogistics.com/sitemap.xml
+  Sitemap: https://secureshiptrack.com/sitemap.xml
   ```
-- [ ] `https://worldvexalogistics.com/sitemap.xml` lists one URL: `<loc>https://worldvexalogistics.com/</loc>`.
+- [ ] `https://secureshiptrack.com/sitemap.xml` lists one URL: `<loc>https://secureshiptrack.com/</loc>`.
 - [ ] Neither file mentions `/private-user/`, `private.` or any old domain. (Listing the admin path in robots.txt
   would publish it; the noindex header keeps it out of search instead.)
 
 ## 5. Launch checklist (after the smoke test passes)
 
 - [ ] Quote request → appears in admin → the quote link opens publicly.
-- [ ] Contact and callback forms submit; the contact form shows a `WVL-TKT-` reference.
-- [ ] **OG image is live:** `https://worldvexalogistics.com/brand/og-image.jpg` returns 200 (`image/jpeg`). `index.html`
+- [ ] Contact and callback forms submit; the contact form shows a `SST-TKT-` reference.
+- [ ] **OG image is live:** `https://secureshiptrack.com/brand/og-image.jpg` returns 200 (`image/jpeg`). `index.html`
   points `og:image`, `twitter:image`, `og:url` and `canonical` at the apex, so if you ever serve the site on `www.`
   instead, update all four first. Then run the home URL through the Facebook Sharing Debugger and LinkedIn Post
   Inspector ("Scrape again").
-- [ ] View source + `robots.txt` + `sitemap.xml` + link preview (paste the link in WhatsApp): World Vexa only.
+- [ ] View source + `robots.txt` + `sitemap.xml` + link preview (paste the link in WhatsApp): SecureShipTrack only.
 - [ ] Final old-brand sweep on the live HTML/JS bundle (REBRAND_MAP §7).
 - [ ] Lighthouse mobile on Home meets the MOTION_3D_SPEC §2 targets.
 - [ ] Phone, WhatsApp, address and social links stay hidden until the owner supplies them.
@@ -236,17 +237,17 @@ If `markerFirstSeen` changed or the shipment is gone, the storage is **not** per
 - **Backups:** the database runs in WAL mode, so copy it with SQLite's own snapshot rather than copying `app.db` alone.
   A daily Hostinger cron job (hPanel → Advanced → Cron Jobs), with your real paths:
   ```bash
-  node -e "const{DatabaseSync}=require('node:sqlite');new DatabaseSync(process.argv[1]).exec(\"VACUUM INTO '\"+process.argv[2]+\"'\")" /home/<user>/wvl-data/app.db /home/<user>/wvl-backups/app-$(date +\%F).db
+  node -e "const{DatabaseSync}=require('node:sqlite');new DatabaseSync(process.argv[1]).exec(\"VACUUM INTO '\"+process.argv[2]+\"'\")" /home/<user>/sst-data/app.db /home/<user>/sst-backups/app-$(date +\%F).db
   ```
   Download a copy off the server regularly and test a restore once (stop the app, put the copy at `DB_PATH`, start).
 - **Uploads backup:** the uploaded photos and proofs are plain files, so a second daily cron job can copy the folder:
   ```bash
-  tar -czf /home/<user>/wvl-backups/uploads-$(date +%F).tar.gz -C /home/<user>/wvl-data uploads
+  tar -czf /home/<user>/sst-backups/uploads-$(date +%F).tar.gz -C /home/<user>/sst-data uploads
   ```
   Restore = stop the app, unpack it back to `UPLOADS_DIR`, start. Restore it together with the database copy from the
   same day, so rows and files match.
 - **Updates:** push to `main` → Hostinger redeploys (and logs admins out). Use a `staging` branch/subdomain for bigger
   changes.
-- **Monitoring:** a free uptime monitor on `https://worldvexalogistics.com/api/health` (5-minute interval) with alerts
-  to info@worldvexalogistics.com.
+- **Monitoring:** a free uptime monitor on `https://secureshiptrack.com/api/health` (5-minute interval) with alerts
+  to info@secureshiptrack.com.
 - **Security:** rotate `ADMIN_PASSWORD_HASH` and `SESSION_SECRET` if anyone with access leaves; `npm audit` monthly.

@@ -171,7 +171,7 @@ test('validatePaymentDetails: required fields, either/or, unknown keys dropped, 
     assert.equal(missing.errors.accountType, 'Choose an option.');
   }
 
-  const wire = validatePaymentDetails('intl_wire', { beneficiary: 'WVL', bankName: 'Bank', swift: 'DEUTDEFF', country: 'Germany' });
+  const wire = validatePaymentDetails('intl_wire', { beneficiary: 'SST', bankName: 'Bank', swift: 'DEUTDEFF', country: 'Germany' });
   assert.equal(wire.ok, false);
   if (!wire.ok) assert.equal(wire.errors.iban, 'Enter IBAN or Account number.');
 
@@ -201,7 +201,7 @@ test('validatePaymentDetails: Zelle phone must be a US number', () => {
 test('customerMethodView: fields in registry order, option labels, IBAN grouped, link/QR/warning/note', () => {
   const wire = customerMethodView({
     id: 'a1', type: 'intl_wire', label: '  ', instructions: ' Use the tracking ID as reference. ',
-    details: { country: 'Germany', swift: 'DEUTDEFF', iban: 'DE89370400440532013000', bankName: 'Deutsche Bank', beneficiary: 'WVL', secret: 'x' },
+    details: { country: 'Germany', swift: 'DEUTDEFF', iban: 'DE89370400440532013000', bankName: 'Deutsche Bank', beneficiary: 'SST', secret: 'x' },
   });
   assert.ok(wire);
   assert.equal(wire!.title, 'International wire (SWIFT / IBAN)');

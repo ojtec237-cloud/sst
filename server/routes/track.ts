@@ -56,7 +56,7 @@ function maskEmail(email: string): string | undefined {
 // GET /api/track/:trackingNumber (Public tracking with PII protection)
 trackRouter.get('/:trackingNumber', (req: Request, res: Response) => {
   try {
-    // Normalise first ("wvl 7k2-m9" -> WVL7K2M9; a child label such as WVL7K2M9-01 resolves to
+    // Normalise first ("sst 7k2-m9" -> SST7K2M9; a child label such as SST7K2M9-01 resolves to
     // its parent), and reject anything that can't be a tracking ID before touching the DB.
     const parsed = parseTrackingInput(req.params.trackingNumber as string);
     if (!parsed) {

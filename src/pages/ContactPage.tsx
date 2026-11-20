@@ -48,7 +48,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate, initialGat
   const [tracking, setTracking] = useState('');
   const [gatewayCode, setGatewayCode] = useState(getGateway(initialGateway) ? initialGateway : '');
   const [message, setMessage] = useState('');
-  // The server's reference (WVL-TKT-######) and the email it was sent with.
+  // The server's reference (SST-TKT-######) and the email it was sent with.
   const [ticket, setTicket] = useState<{ id: string; email: string } | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);

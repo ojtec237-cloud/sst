@@ -3,7 +3,7 @@
 // list is pruned to the proofs still waiting so it never grows. Storage can be missing or throw
 // (private windows, blocked site data), so every access is wrapped and falls back to memory.
 
-export const SEEN_PROOFS_KEY = 'wvl_seen_proofs';
+export const SEEN_PROOFS_KEY = 'sst_seen_proofs';
 
 /** Stored value → list of ids; anything malformed reads as empty. */
 export function parseSeenProofs(raw: string | null): string[] {

@@ -35,9 +35,9 @@ test('decimals: 0 for JPY, 3 for KWD, 2 for the rest', () => {
   assert.equal(fitsCurrencyDecimals(Infinity, 'USD'), false);
 });
 
-const paypal = { type: 'paypal', details: { email: 'pay@example.com', name: 'WVL Billing' } };
+const paypal = { type: 'paypal', details: { email: 'pay@example.com', name: 'SST Billing' } };
 const btc = { type: 'bitcoin', details: { network: 'bitcoin', address: 'bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq' } };
-const base = { amount: 120, currency: 'USD', chargeReason: 'Customs duty – Invoice WVL-INV-104233', methods: [paypal, btc] };
+const base = { amount: 120, currency: 'USD', chargeReason: 'Customs duty – Invoice SST-INV-104233', methods: [paypal, btc] };
 let counter = 0;
 const newId = () => `new-${++counter}`;
 

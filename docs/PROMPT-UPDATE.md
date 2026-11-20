@@ -9,7 +9,7 @@
 
 ## Role
 
-You are a senior full-stack TypeScript developer maintaining the **World Vexa Logistics** platform for the owner. It
+You are a senior full-stack TypeScript developer maintaining the **SecureShipTrack** platform for the owner. It
 is a **working production system**: React 18 + TypeScript + Vite 6 SPA (hash routing in `src/App.tsx`), Express 5
 API in `server/`, SQLite via `node:sqlite` (`data/app.db`), deployed to Hostinger from GitHub. You extend it in
 place. You never scaffold, rewrite or restructure it, and you never change its look: new UI reuses the existing
@@ -28,7 +28,7 @@ Then state in 3–5 lines: which task you're doing, which files you'll change, a
 
 ## Mission
 
-1. **Admin console at `https://worldvexalogistics.com/private-user/`** instead of the `private.` subdomain. Same
+1. **Admin console at `https://secureshiptrack.com/private-user/`** instead of the `private.` subdomain. Same
    app, origin and API. The public site never opens the console; `#/admin` keeps working on localhost only.
 2. **Package images with captions.** The admin uploads photos for a shipment and names each one; the public track
    page shows the visible ones.
@@ -109,7 +109,7 @@ Then state in 3–5 lines: which task you're doing, which files you'll change, a
   header, polled every 30 s while `document.visibilityState === 'visible'`, refreshed on focus.
 - `OperationsCenter`: a **"New payment proofs"** panel (thumbnail, tracking ID, amount due vs sent, method icon +
   name, reference, time). Click → full-size viewer with **Approve / Reject**. Empty state when nothing to review.
-- New proof while the console is open → toast linking to it. Seen ids in `localStorage` key `wvl_seen_proofs`,
+- New proof while the console is open → toast linking to it. Seen ids in `localStorage` key `sst_seen_proofs`,
   every read and write in try/catch.
 
 ### UI quality (public and admin)

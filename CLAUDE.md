@@ -1,4 +1,4 @@
-# CLAUDE.md — World Vexa Logistics Website
+# CLAUDE.md — SecureShipTrack Website
 
 > This file is read automatically by Claude Code at the start of every session.
 > Keep it short, current and true. Detailed specs live in `/docs`.
@@ -7,9 +7,11 @@
 
 **The system is already built, and it works.** It is a complete, running logistics platform: public website,
 live shipment tracking, Express/SQLite API, admin operations console, PDF documents, quotes and bookings. It was
-last branded "SDL Global Logistics".
+last branded "World Vexa Logistics" (prefix `WVL`), and before that
+"SDL Global Logistics". The World Vexa site stays live on its own domain and repo; this folder is the
+SecureShipTrack copy (secureshiptrack.com). Never push this code to the old repo.
 
-**You are a senior full-stack developer re-launching it as a new company, World Vexa Logistics, on a new domain.**
+**You are a senior full-stack developer re-launching it as a new company, SecureShipTrack, on a new domain.**
 Work in place on the existing code (no rewrites), in small reviewable commits (`rebrand: …`, `assets: …`, `fix: …`),
 and explain what changed, which files, and how you verified it. Tracking, admin login, shipment creation, documents,
 quotes and the database must keep working after every change. The step-by-step plan is in `PROMPTS.md`.
@@ -33,17 +35,17 @@ Decisions already made (don't revisit):
 
 | Field | Value |
 |---|---|
-| Company name (UI) | World Vexa Logistics |
-| Short name | WVL (e.g. "WVL Operations Console", "WVL Operations Centre") |
-| Registered legal name | World Vexa Logistics (no "Ltd"; used in the footer, legal pages and PDFs) |
+| Company name (UI) | SecureShipTrack |
+| Short name | SST (e.g. "SST Operations Console", "SST Operations Centre") |
+| Registered legal name | SecureShipTrack (no "Ltd"; used in the footer, legal pages and PDFs) |
 | Tagline | Fast, Safe, Reliable |
-| Primary email | info@worldvexalogistics.com |
-| Domain | worldvexalogistics.com (public site: https://worldvexalogistics.com + `www`) |
+| Primary email | info@secureshiptrack.com |
+| Domain | secureshiptrack.com (public site: https://secureshiptrack.com + `www`) |
 | Coverage | Worldwide |
-| Admin console URL | https://worldvexalogistics.com/private-user/ only (`ADMIN_PATH`, same Node app and origin), plus `#/admin` on localhost. The `private.` subdomain is dropped (docs/update.md D-11) |
-| Tracking ID prefix | `WVL`: full ID is **exactly 8 characters**, `WVL` + 5 characters (e.g. `WVL7K2M9`) |
-| Reference prefix | `WVL`: `WVL-SL-######` (seal), `WVL-TKT-######` (ticket), `WVL-INV-######` (invoice) |
-| Logo source | `images/World Vexa Logistics Logo.png` (2024×777, red/black). Has a fake checkerboard "transparency" painted in; clean it first, or use a real transparent PNG/SVG from the designer |
+| Admin console URL | https://secureshiptrack.com/private-user/ only (`ADMIN_PATH`, same Node app and origin), plus `#/admin` on localhost. The `private.` subdomain is dropped (docs/update.md D-11) |
+| Tracking ID prefix | `SST`: full ID is **exactly 8 characters**, `SST` + 5 characters (e.g. `SST7K2M9`) |
+| Reference prefix | `SST`: `SST-SL-######` (seal), `SST-TKT-######` (ticket), `SST-INV-######` (invoice) |
+| Logo source | `images/SecureShipTrack Globe Courier Logo.png` (2172×724, red/black, real transparency). `node scripts/optimize-images.mjs --brand` rebuilds every logo, icon and the OG image from it |
 | Photos | Replace every photo showing the old brand with free HD stock (Pexels / Unsplash / Pixabay licences) |
 | Phone / WhatsApp / HQ address / socials | **Blank. Stay hidden until the owner supplies them. Never invent them.** |
 
@@ -127,6 +129,6 @@ docs/             Project docs — read the relevant one before each phase
 
 - [ ] `npm run build` passes, no new console errors in the browser.
 - [ ] Checked at 375px (mobile), 768px (tablet) and 1440px (desktop).
-- [ ] No old-brand strings introduced (`grep -rniE "duolingo|sdl global|sdlgloballogistics|sdl-logo|images/sdl/" src server index.html Public`
+- [ ] No old-brand strings introduced (`grep -rniE "duolingo|sdl global|sdlgloballogistics|sdl-logo|images/sdl/|vexa|wvl" src server index.html Public`
   shows nothing new; internal `sdl-*` CSS classes/tokens are allowed).
 - [ ] Tracker updated.

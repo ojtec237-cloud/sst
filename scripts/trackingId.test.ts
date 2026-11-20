@@ -17,13 +17,13 @@ test('alphabet is the 32 unambiguous characters', () => {
   for (const c of '01OI') assert.ok(!TRACKING_ALPHABET.includes(c), `${c} must be excluded`);
 });
 
-test('generateTrackingId: WVL + 5 safe characters, 8 in total', () => {
+test('generateTrackingId: SST + 5 safe characters, 8 in total', () => {
   const seen = new Set<string>();
   const used = new Set<string>();
   for (let i = 0; i < 5000; i++) {
     const id = generateTrackingId();
     assert.equal(id.length, 8);
-    assert.match(id, /^WVL[2-9A-HJ-NP-Z]{5}$/);
+    assert.match(id, /^SST[2-9A-HJ-NP-Z]{5}$/);
     assert.ok(isValidTrackingId(id));
     seen.add(id);
     for (const c of id.slice(3)) used.add(c);
@@ -34,44 +34,44 @@ test('generateTrackingId: WVL + 5 safe characters, 8 in total', () => {
 });
 
 test('normalizeTrackingInput: trim, uppercase, strip spaces and dashes', () => {
-  assert.equal(normalizeTrackingInput('wvl 7k2-m9'), 'WVL7K2M9');
-  assert.equal(normalizeTrackingInput('  WVL7K2M9 \n'), 'WVL7K2M9');
-  assert.equal(normalizeTrackingInput('w-v-l-7-k-2-m-9'), 'WVL7K2M9');
+  assert.equal(normalizeTrackingInput('sst 7k2-m9'), 'SST7K2M9');
+  assert.equal(normalizeTrackingInput('  SST7K2M9 \n'), 'SST7K2M9');
+  assert.equal(normalizeTrackingInput('s-s-t-7-k-2-m-9'), 'SST7K2M9');
   const enDash = String.fromCharCode(0x2013); // pasted from a document
-  assert.equal(normalizeTrackingInput(`WVL${enDash}7K2M9${enDash}01`), 'WVL7K2M9-01');
+  assert.equal(normalizeTrackingInput(`SST${enDash}7K2M9${enDash}01`), 'SST7K2M9-01');
 });
 
 test('normalizeTrackingInput: keeps the -NN piece suffix on a full ID', () => {
-  assert.equal(normalizeTrackingInput('wvl7k2m9-01'), 'WVL7K2M9-01');
-  assert.equal(normalizeTrackingInput('wvl 7k2-m9 - 12'), 'WVL7K2M9-12');
-  assert.equal(normalizeTrackingInput('WVL7K2M9--03'), 'WVL7K2M9-03');
+  assert.equal(normalizeTrackingInput('sst7k2m9-01'), 'SST7K2M9-01');
+  assert.equal(normalizeTrackingInput('sst 7k2-m9 - 12'), 'SST7K2M9-12');
+  assert.equal(normalizeTrackingInput('SST7K2M9--03'), 'SST7K2M9-03');
   // Not a full ID before the dash, so the dash is just stripped.
-  assert.equal(normalizeTrackingInput('WVL7K2-99'), 'WVL7K299');
+  assert.equal(normalizeTrackingInput('SST7K2-99'), 'SST7K299');
 });
 
-test('isValidTrackingId: strict ^WVL[2-9A-HJ-NP-Z]{5}$', () => {
-  for (const ok of ['WVL7K2M9', 'WVLQ4X8T', 'WVL22222', 'WVLZZZZZ']) assert.ok(isValidTrackingId(ok), ok);
+test('isValidTrackingId: strict ^SST[2-9A-HJ-NP-Z]{5}$', () => {
+  for (const ok of ['SST7K2M9', 'SSTQ4X8T', 'SST22222', 'SSTZZZZZ']) assert.ok(isValidTrackingId(ok), ok);
   for (const bad of [
-    '', 'WVL7K2M', 'WVL7K2M9X', 'wvl7k2m9', 'WVL7K2M0', 'WVL7K2MO', 'WVL7K2M1', 'WVL7K2MI',
-    'DXP7K2M9', 'WVL 7K2M9', 'WVL7K2M9-01', 'RTO-WVL7K2M9', 'DXP-2026-ABCDEFGH'
+    '', 'SST7K2M', 'SST7K2M9X', 'sst7k2m9', 'SST7K2M0', 'SST7K2MO', 'SST7K2M1', 'SST7K2MI',
+    'DXP7K2M9', 'SST 7K2M9', 'SST7K2M9-01', 'RTO-SST7K2M9', 'DXP-2026-ABCDEFGH'
   ]) assert.ok(!isValidTrackingId(bad), bad);
 });
 
-test('parsePieceLabel: WVLXXXXX-NN resolves to parent and piece number', () => {
-  assert.deepEqual(parsePieceLabel('WVL7K2M9-01'), { parentId: 'WVL7K2M9', piece: 1 });
-  assert.deepEqual(parsePieceLabel('wvl 7k2-m9-12'), { parentId: 'WVL7K2M9', piece: 12 });
-  assert.deepEqual(parsePieceLabel('WVL7K2M902'), { parentId: 'WVL7K2M9', piece: 2 });
-  assert.equal(parsePieceLabel('WVL7K2M9'), null);
-  assert.equal(parsePieceLabel('WVL7K2M9-00'), null);
-  assert.equal(parsePieceLabel('WVL7K2M9-1'), null);
-  assert.equal(parsePieceLabel('WVL7K2M9-001'), null);
-  assert.equal(parsePieceLabel('WVL7K2M9-PL01'), null);
-  assert.equal(parsePieceLabel('WVL7K2M0-01'), null);
+test('parsePieceLabel: SSTXXXXX-NN resolves to parent and piece number', () => {
+  assert.deepEqual(parsePieceLabel('SST7K2M9-01'), { parentId: 'SST7K2M9', piece: 1 });
+  assert.deepEqual(parsePieceLabel('sst 7k2-m9-12'), { parentId: 'SST7K2M9', piece: 12 });
+  assert.deepEqual(parsePieceLabel('SST7K2M902'), { parentId: 'SST7K2M9', piece: 2 });
+  assert.equal(parsePieceLabel('SST7K2M9'), null);
+  assert.equal(parsePieceLabel('SST7K2M9-00'), null);
+  assert.equal(parsePieceLabel('SST7K2M9-1'), null);
+  assert.equal(parsePieceLabel('SST7K2M9-001'), null);
+  assert.equal(parsePieceLabel('SST7K2M9-PL01'), null);
+  assert.equal(parsePieceLabel('SST7K2M0-01'), null);
 });
 
 test('parseTrackingInput: IDs and child labels resolve to the 8-character parent', () => {
-  assert.deepEqual(parseTrackingInput('wvl 7k2-m9'), { trackingId: 'WVL7K2M9' });
-  assert.deepEqual(parseTrackingInput('WVL7K2M9-03'), { trackingId: 'WVL7K2M9', piece: 3 });
+  assert.deepEqual(parseTrackingInput('sst 7k2-m9'), { trackingId: 'SST7K2M9' });
+  assert.deepEqual(parseTrackingInput('SST7K2M9-03'), { trackingId: 'SST7K2M9', piece: 3 });
   assert.equal(parseTrackingInput('DXP-2026-ABCD1234'), null);
   assert.equal(parseTrackingInput('hello'), null);
   assert.equal(parseTrackingInput(''), null);
@@ -89,7 +89,7 @@ test('pieceLabel round-trips through parsePieceLabel', () => {
 test('generateTrackingId uses the random source it is given (server passes crypto.randomInt)', async () => {
   const picks: number[] = [];
   const id = generateTrackingId((max) => { assert.equal(max, 32); picks.push(max); return picks.length - 1; });
-  assert.equal(id, 'WVL23456');
+  assert.equal(id, 'SST23456');
   assert.equal(picks.length, 5);
   const { randomInt } = await import('node:crypto');
   for (let i = 0; i < 1000; i++) assert.ok(isValidTrackingId(generateTrackingId((max) => randomInt(max))));

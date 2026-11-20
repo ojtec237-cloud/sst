@@ -208,7 +208,7 @@ export const api = {
     return fetchApi<Shipment>(`/shipments/${id(trackingNumber)}/events/${id(eventId)}`, { method: 'PATCH', body: updates });
   },
 
-  // Return to origin: the server creates the return as its own shipment with a new WVL ID.
+  // Return to origin: the server creates the return as its own shipment with a new SST ID.
   async initiateReturn(trackingNumber: string, reason: string, operator?: string): Promise<{ original: Shipment; returnShipment: Shipment }> {
     return fetchApi(`/shipments/${id(trackingNumber)}/return`, { method: 'POST', body: { reason, operator } });
   },

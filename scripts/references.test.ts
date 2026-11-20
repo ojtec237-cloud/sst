@@ -3,8 +3,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { generateReference, referenceFor, REFERENCE_PATTERN } from '../src/shared/references.ts';
 
-test('generateReference: WVL-SL/TKT/INV + 6 digits', () => {
-  for (const [kind, prefix] of [['seal', 'WVL-SL-'], ['ticket', 'WVL-TKT-'], ['invoice', 'WVL-INV-']] as const) {
+test('generateReference: SST-SL/TKT/INV + 6 digits', () => {
+  for (const [kind, prefix] of [['seal', 'SST-SL-'], ['ticket', 'SST-TKT-'], ['invoice', 'SST-INV-']] as const) {
     for (let i = 0; i < 500; i++) {
       const ref = generateReference(kind);
       assert.ok(ref.startsWith(prefix), ref);
@@ -16,5 +16,5 @@ test('generateReference: WVL-SL/TKT/INV + 6 digits', () => {
 test('referenceFor is stable per seed and well-formed', () => {
   assert.equal(referenceFor('invoice', 'INV-2026-48213'), referenceFor('invoice', 'INV-2026-48213'));
   assert.notEqual(referenceFor('invoice', 'INV-2026-48213'), referenceFor('invoice', 'INV-2026-48214'));
-  assert.match(referenceFor('invoice', 'x'), /^WVL-INV-\d{6}$/);
+  assert.match(referenceFor('invoice', 'x'), /^SST-INV-\d{6}$/);
 });

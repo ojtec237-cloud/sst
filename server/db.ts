@@ -1,7 +1,7 @@
 import { DatabaseSync } from 'node:sqlite';
 import path from 'path';
 import fs from 'fs';
-import { COMPANY, DOMAIN, EMAIL, LEGAL_NAME } from '../src/config/brand.js';
+import { COMPANY, COMPANY_SHORT, DOMAIN, EMAIL, LEGAL_NAME } from '../src/config/brand.js';
 
 // Placeholder contact details the pre-rebrand seed wrote into settings, and what replaces them.
 const OLD_BRAND_SETTINGS: Record<string, { old: string; next: string }> = {
@@ -24,24 +24,45 @@ const OLD_BRAND_TEXT: [RegExp, string][] = [
   [/Duolingo Express/gi, COMPANY],
   [/Duolingo Logistics/gi, COMPANY],
   [/Duolingo/gi, COMPANY],
+  // SDL Global Logistics (sdlgloballogistics.com).
+  [/SDL Global Logistics(?:\s+(?:LLC|Inc|Ltd)\b\.?)?/gi, LEGAL_NAME],
+  [/[\w.+-]*@sdlgloballogistics\.com/gi, EMAIL],
+  [/(?:private\.)?(?:www\.)?sdlgloballogistics\.com/gi, DOMAIN],
+  // World Vexa Logistics (worldvexalogistics.com, short name WVL).
+  [/World Vexa Logistics/gi, COMPANY],
+  [/World Vexa/gi, COMPANY],
+  [/[\w.+-]*@worldvexalogistics\.com/gi, EMAIL],
+  [/(?:private\.)?(?:www\.)?worldvexalogistics\.com/gi, DOMAIN],
+  // The short name on its own ("WVL Operations Centre"). Tracking IDs (WVL7K2M9) and reference
+  // numbers (WVL-INV-104233) are record keys and stay as stored: no word boundary after "WVL" in
+  // an ID, and a reference continues with "-".
+  [/\bWVL\b(?!-)/g, COMPANY_SHORT],
 ];
+
+// Cheap pre-filter for the rows OLD_BRAND_TEXT may change (lower-cased LIKE patterns).
+const OLD_BRAND_LIKE = ['%duolingo%', '%sdl global%', '%sdlgloballogistics%', '%vexa%', '%wvl%'];
 
 // Rewrites old-brand wording in every text column of every table. Runs at startup; rows
 // without the old brand are never touched, so after the first run it only reads.
 function replaceOldBrandText() {
   const tables = db.prepare(`SELECT name FROM sqlite_master WHERE type = 'table' AND name NOT LIKE 'sqlite_%'`).all() as { name: string }[];
+  const where = OLD_BRAND_LIKE.map(() => '?').map((p) => `lower(%COL%) LIKE ${p}`).join(' OR ');
   for (const { name: table } of tables) {
     const columns = (db.prepare(`PRAGMA table_info(${table})`).all() as { name: string; type: string }[])
       .filter((c) => c.type.toUpperCase() === 'TEXT');
     for (const { name: column } of columns) {
-      const rows = db.prepare(`SELECT rowid AS rid, ${column} AS v FROM ${table} WHERE lower(${column}) LIKE '%duolingo%'`).all() as { rid: number; v: string }[];
+      const rows = db.prepare(`SELECT rowid AS rid, ${column} AS v FROM ${table} WHERE ${where.split('%COL%').join(column)}`)
+        .all(...OLD_BRAND_LIKE) as { rid: number; v: string }[];
       if (rows.length === 0) continue;
       const update = db.prepare(`UPDATE ${table} SET ${column} = ? WHERE rowid = ?`);
+      let changed = 0;
       for (const row of rows) {
         const next = OLD_BRAND_TEXT.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), row.v);
+        if (next === row.v) continue; // e.g. only a stored WVL tracking ID
         update.run(next, row.rid);
+        changed++;
       }
-      console.log(`Rebrand: replaced old brand text in ${rows.length} ${table}.${column} value(s).`);
+      if (changed) console.log(`Rebrand: replaced old brand text in ${changed} ${table}.${column} value(s).`);
     }
   }
 }

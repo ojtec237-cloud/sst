@@ -239,10 +239,10 @@ export function legalDocs({ email, address }: LegalContact): LegalDoc[] {
           body: [
             "Some pages remember a few choices in your browser's local storage. This data stays on your device and is not sent to us:",
             [
-              'wvl_recent_tracking: tracking IDs you looked up recently, so you can open them again.',
-              'wvl_units: whether you prefer metric or imperial units.',
-              'wvl_live_shipment_stream: the latest update for a shipment you are viewing, so other open tabs stay in step.',
-              'wvl_seen_proofs: on our operations console only, which proofs of payment staff have already been alerted to.'
+              'sst_recent_tracking: tracking IDs you looked up recently, so you can open them again.',
+              'sst_units: whether you prefer metric or imperial units.',
+              'sst_live_shipment_stream: the latest update for a shipment you are viewing, so other open tabs stay in step.',
+              'sst_seen_proofs: on our operations console only, which proofs of payment staff have already been alerted to.'
             ],
             'You can clear these at any time in your browser settings.'
           ]
