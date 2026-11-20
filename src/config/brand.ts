@@ -29,7 +29,7 @@ export function isAdminPathname(pathname: string): boolean {
 }
 
 // Smartsupp live chat (src/services/liveChat.ts). Public pages only, never the admin console.
-export const SMARTSUPP_KEY = '4b895ac43ffac23845e9b33f4e6c3d78b772296d';
+export const SMARTSUPP_KEY = '0be011266a556527425853cbba1c49462736435d';
 
 export const ADMIN_CONSOLE_NAME =`${COMPANY_SHORT} Operations Console`;
 
